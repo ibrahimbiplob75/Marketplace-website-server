@@ -1,6 +1,6 @@
 const express=require("express");
 const app=express();
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const dotenv = require('dotenv').config();
 const cors=require("cors");
 const port = process.env.PORT || 5000;
@@ -29,17 +29,35 @@ async function run() {
     await client.connect();
     const database=client.db("productDB").collection('product');
 
+
+    //Insert into database
     app.post("/product",async(req,res)=>{
       const newProduct=req.body;
       console.log(newProduct);
       const result=await database.insertOne(newProduct);
       res.send(result);
     })
-
+    //Get Data from database
     app.get("/product",async(req,res)=>{
         const cursor=database.find();
         const result=await cursor.toArray();
         res.send(result);
+    });
+
+    //geting single data from database
+
+    app.get("/product/details/:id",async(req,res)=>{
+      const id=req.params.id;
+      const query={_id : new ObjectId(id)};
+      const result=await database.findOne(query);
+      res.send(result);
+    });
+
+    app.post("/Cartproduct",async(req,res)=>{
+      const CartProduct=req.body;
+      console.log(CartProduct);
+      const result=await database.insertOne(CartProduct);
+      res.send(result);
     })
 
 
