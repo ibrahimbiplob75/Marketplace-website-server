@@ -58,7 +58,23 @@ async function run() {
       console.log(CartProduct);
       const result=await database.insertOne(CartProduct);
       res.send(result);
-    })
+    });
+    //myCart product 
+    app.get("/product/myCart",async(req,res)=>{
+        const cursor = database.find({ user_email: { $exists: true } }); // Filter for documents with "Email" field
+        const result = await cursor.toArray();
+        res.send(result);
+        
+    });
+
+    app.delete("/product/myCart/:id",async(req,res)=>{
+        const id=req.params.id;
+        const query={_id:new ObjectId(id)};
+        const result=await database.deleteOne(query);
+        res.send(result);
+    });
+
+
 
 
     
