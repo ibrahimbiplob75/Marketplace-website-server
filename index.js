@@ -39,7 +39,7 @@ async function run() {
     })
     //Get Data from database
     app.get("/product",async(req,res)=>{
-        const cursor=database.find();
+        const cursor=database.find({ user_email: { $exists: false } });
         const result=await cursor.toArray();
         res.send(result);
     });
