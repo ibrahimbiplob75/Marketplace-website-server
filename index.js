@@ -75,6 +75,30 @@ async function run() {
     });
 
 
+    //update product
+    app.put("/product/myCart/:id",async(req,res)=>{
+      const id=req.params.id;
+      const query={_id: new ObjectId(id)};
+      const options = { upsert: true };
+      const update=req.body;
+      const updateProduct={
+        $set:{
+            name:update.name,
+            quantity:update.quantity,
+            brand:update.brand,
+            review:update.review,
+            category:update.category,
+            details:update.details,
+            photo:update.photo,
+            price:update.price,
+        }
+      }
+      const result=await database.updateOne(query,updateProduct,options);
+      res.send(result);
+
+    })
+
+
 
 
     
